@@ -18,7 +18,7 @@ public class User {
     private Long userIdx;
 
     @Column(name = "oauth_id")
-    private Long oauthId;
+    private String oauthId;
 
     @Column
     private String name;
@@ -26,7 +26,7 @@ public class User {
     @Column
     private String role;
 
-    public User(Long oauthId, String name) {
+    public User(String oauthId, String name) {
         this.oauthId = oauthId;
         this.name = name;
     }
