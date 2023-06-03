@@ -99,9 +99,9 @@ public class OAuthService {
 
     public void login(User userDto, HttpServletResponse response) {
         try {
-            com.tave.connectX.entity.User user = oAuthRepository.findUserByName(userDto.getName());
+            com.tave.connectX.entity.User user = oAuthRepository.findUserByOauthId(userDto.getOauthId());
             if (user == null) {
-                user = oAuthRepository.save(new com.tave.connectX.entity.User(userDto.getName()));
+                user = oAuthRepository.save(new com.tave.connectX.entity.User(userDto.getOauthId(), userDto.getName()));
             }
             String token = buildToken(user);
             response.addHeader("Authorization", "BEARER" + " " + token);

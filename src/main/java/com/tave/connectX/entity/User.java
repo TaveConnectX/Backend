@@ -17,13 +17,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;
 
+    @Column(name = "oauth_id")
+    private Long oauthId;
+
     @Column
     private String name;
 
     @Column
     private String role;
 
-    public User(String name) {
+    public User(Long oauthId, String name) {
+        this.oauthId = oauthId;
         this.name = name;
     }
 }
