@@ -30,7 +30,7 @@ public class OAuthUserInfo {
         String nickName = properties.get("nickname");
 
         // Image url - thumbnail_image : 110px * 110px 또는 100px * 100px // profile_image : 640px * 640px 또는 480px * 480px
-        String imageUrl = properties.get("thumbnail_image");
+        String imageUrl = properties.get("profile_image");
 
         return new OAuthUserInfo(attributes, oAuthId, imageUrl, nickName);
     }
