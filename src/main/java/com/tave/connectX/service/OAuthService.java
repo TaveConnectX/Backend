@@ -1,12 +1,10 @@
 package com.tave.connectX.service;
 
-import com.tave.connectX.config.JwtConfig;
 import com.tave.connectX.dto.OAuthToken;
 import com.tave.connectX.dto.OAuthUserInfo;
 import com.tave.connectX.dto.User;
+import com.tave.connectX.provider.JwtProvider;
 import com.tave.connectX.repository.OAuthRepository;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +15,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -25,6 +22,7 @@ import java.util.Map;
 @Service
 public class OAuthService {
     private final OAuthRepository oAuthRepository;
+    private final JwtProvider jwtProvider;
 
     static final String URI_KAKAO = "https://kauth.kakao.com";
     static final String URI_KAKAO_API = "https://kapi.kakao.com";
@@ -103,30 +101,11 @@ public class OAuthService {
             if (user == null) {
                 user = oAuthRepository.save(new com.tave.connectX.entity.User(userDto.getOauthId(), userDto.getName()));
             }
-            String token = buildToken(user);
+            String token = jwtProvider.buildToken(user);
             response.addHeader("Authorization", "BEARER" + " " + token);
         } catch (Exception e) {
             log.info("", e);
             throw new IllegalArgumentException(e);
         }
-    }
-
-    private String buildToken(com.tave.connectX.entity.User user) {
-        Map<String, Object> jwtHeader = new HashMap<>();
-        jwtHeader.put("typ", "JWT");
-        jwtHeader.put("alg", "HS256");
-        jwtHeader.put("regDate", System.currentTimeMillis());
-
-        Map<String, Object> claim = new HashMap<>();
-        claim.put("userIdx", user.getUserIdx());
-        claim.put("name", user.getName());
-        claim.put("role", user.getRole());
-
-        return Jwts.builder()
-                .setSubject(user.getName())
-                .setHeader(jwtHeader)
-                .setClaims(claim)
-                .signWith(SignatureAlgorithm.HS256, JwtConfig.jwtSecretKey)
-                .compact();
     }
 }
