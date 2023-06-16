@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -43,6 +44,11 @@ public class JwtProvider {
                 .setClaims(claim)
                 .signWith(SignatureAlgorithm.HS256, JwtConfig.jwtSecretKey)
                 .compact();
+    }
+
+    // Authorization Header를 통해 인증을 한다.
+    public String resolveToken(HttpServletRequest request) {
+        return request.getHeader("Authorization");
     }
 
     public boolean validateToken(String token) {
