@@ -41,3 +41,6 @@ out/
 
 ### Configuration ###
 application-db.properties
+application-oauth.properties
+src/main/java/com/tave/connectX/config/JwtConfig.java
+java/com/tave/connectX/config/JwtConfig.java
