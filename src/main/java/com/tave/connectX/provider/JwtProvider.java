@@ -9,6 +9,10 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -21,6 +25,8 @@ import java.util.Map;
 @Component
 public class JwtProvider {
     private Key secretKey;
+
+    private final UserDetailsService userDetailsService;
 
     @PostConstruct
     protected void init() {
@@ -44,6 +50,18 @@ public class JwtProvider {
                 .setClaims(claim)
                 .signWith(SignatureAlgorithm.HS256, JwtConfig.jwtSecretKey)
                 .compact();
+    }
+
+    // 권한정보 획득
+    // Spring Security 인증과정에서 권한확인을 위한 기능
+    public Authentication getAuthentication(String token) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getAccount(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    // 토큰에 담겨있는 유저 account 획득
+    public String getAccount(String token) {
+        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     // Authorization Header를 통해 인증을 한다.
