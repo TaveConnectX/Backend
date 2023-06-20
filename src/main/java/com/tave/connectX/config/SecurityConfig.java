@@ -36,11 +36,9 @@ public class SecurityConfig {
                 // 로그인은 모두 승인
                 .requestMatchers( "/login/**", "/oauth2/**","v3/api-docs/", "/swagger-resources/", "/swagger-ui*/",
                         "/webjars/", "/swagger/**").permitAll()
-                // /admin으로 시작하는 요청은 ADMIN 권한이 있는 유저에게만 허용
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                // /user 로 시작하는 요청은 USER 권한이 있는 유저에게만 허용
-                .requestMatchers("/user/**").hasRole("USER")
-                .anyRequest().denyAll()
+                //admin으로 시작하는 요청은 ADMIN 권한이 있는 유저에게만 허용
+                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 // JWT 인증 필터 적용
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
@@ -50,14 +48,14 @@ public class SecurityConfig {
                     // 권한 문제가 발생했을 때 이 부분을 호출한다.
                     response.setStatus(403);
                     response.setCharacterEncoding("utf-8");
-                    response.setContentType("text/html; charset=UTF-8");
+                    response.setContentType("application/json; charset=UTF-8");
                     response.getWriter().write("권한이 없는 사용자입니다.");
                 })
                 .authenticationEntryPoint((request, response, authException) -> {
                     // 인증문제가 발생했을 때 이 부분을 호출한다.
                     response.setStatus(401);
                     response.setCharacterEncoding("utf-8");
-                    response.setContentType("text/html; charset=UTF-8");
+                    response.setContentType("application/json; charset=UTF-8");
                     response.getWriter().write("인증되지 않은 사용자입니다.");
                 });
 

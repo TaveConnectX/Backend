@@ -9,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,7 +41,7 @@ public class JwtProvider {
         jwtHeader.put("regDate", System.currentTimeMillis());
 
         Map<String, Object> claim = new HashMap<>();
-        claim.put("userIdx", user.getUserIdx());
+        claim.put("oauthId", user.getOauthId());
         claim.put("name", user.getName());
         claim.put("role", user.getRole());
 
@@ -48,7 +49,8 @@ public class JwtProvider {
                 .setSubject(user.getName())
                 .setHeader(jwtHeader)
                 .setClaims(claim)
-                .signWith(SignatureAlgorithm.HS256, JwtConfig.jwtSecretKey)
+                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60000))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
@@ -61,7 +63,7 @@ public class JwtProvider {
 
     // 토큰에 담겨있는 유저 account 획득
     public String getAccount(String token) {
-        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
+        return (String) Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("oauthId");
     }
 
     // Authorization Header를 통해 인증을 한다.
