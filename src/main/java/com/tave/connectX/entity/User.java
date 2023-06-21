@@ -1,27 +1,33 @@
 package com.tave.connectX.entity;
 
-import com.tave.connectX.entity.role.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@DynamicInsert
 public class User {
     @Id
     @Column(name = "user_idx")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;
 
+    @Column(name = "oauth_id")
+    private String oauthId;
+
     @Column
     private String name;
 
     @Column
-    private Role role;
+    private String role;
 
-    public User(String name, Role role) {
+    public User(String oauthId, String name) {
+        this.oauthId = oauthId;
         this.name = name;
-        this.role = role;
     }
 }
