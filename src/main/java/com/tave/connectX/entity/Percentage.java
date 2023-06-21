@@ -19,9 +19,18 @@ public class Percentage {
     @Column
     private int defeat;
 
+    @Column
+    private int points;
+
     public Percentage(User userFk, int victory, int defeat) {
         this.userFk = userFk;
         this.victory = victory;
         this.defeat = defeat;
     }
+
+    public int updatePoints(int points) {
+        this.points = points;
+        return this.points;
+    }
+
 }
