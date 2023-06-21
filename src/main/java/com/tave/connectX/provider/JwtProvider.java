@@ -9,6 +9,11 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -22,6 +27,8 @@ import java.util.Map;
 public class JwtProvider {
     private Key secretKey;
 
+    private final UserDetailsService userDetailsService;
+
     @PostConstruct
     protected void init() {
         secretKey = Keys.hmacShaKeyFor(JwtConfig.jwtSecretKey.getBytes(StandardCharsets.UTF_8));
@@ -34,7 +41,7 @@ public class JwtProvider {
         jwtHeader.put("regDate", System.currentTimeMillis());
 
         Map<String, Object> claim = new HashMap<>();
-        claim.put("userIdx", user.getUserIdx());
+        claim.put("oauthId", user.getOauthId());
         claim.put("name", user.getName());
         claim.put("role", user.getRole());
 
@@ -42,8 +49,21 @@ public class JwtProvider {
                 .setSubject(user.getName())
                 .setHeader(jwtHeader)
                 .setClaims(claim)
-                .signWith(SignatureAlgorithm.HS256, JwtConfig.jwtSecretKey)
+                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60000))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+    }
+
+    // 권한정보 획득
+    // Spring Security 인증과정에서 권한확인을 위한 기능
+    public Authentication getAuthentication(String token) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getAccount(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    // 토큰에 담겨있는 유저 account 획득
+    public String getAccount(String token) {
+        return (String) Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("oauthId");
     }
 
     // Authorization Header를 통해 인증을 한다.
