@@ -43,7 +43,7 @@ public class GameService {
     private User loadUser(HttpServletRequest request) {
         // 현재 유저 조회
         String token = jwtProvider.resolveToken(request);
-        String account = jwtProvider.getAccount(token);
+        String account = jwtProvider.getAccount(token.split(" ")[1].trim());
         User user = userRepository.findByOauthId(account).get();
         return user;
     }
