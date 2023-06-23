@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 @RestController
-public class ApiController {
+public class ApiTestController {
 
     private final DeepLearningClient deepLearningClient;
 
