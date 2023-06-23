@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .and().authorizeHttpRequests()
                 // 로그인은 모두 승인
                 .requestMatchers( "/login/**", "/oauth2/**","v3/api-docs/**", "/swagger-resources/", "/swagger-ui/**",
-                        "/webjars/", "/swagger/**","/api/**").permitAll()
+                        "/webjars/", "/swagger/**","/api/**","/games/**").permitAll()
                 //admin으로 시작하는 요청은 ADMIN 권한이 있는 유저에게만 허용
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
