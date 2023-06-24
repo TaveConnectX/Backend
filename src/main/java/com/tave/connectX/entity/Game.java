@@ -16,12 +16,16 @@ public class Game {
     @Column(name = "is_winner")
     private int isWinner;
 
+    @Column
+    private int difficulty;
+
     @ManyToOne
     @JoinColumn(name = "user_idx")
     private User userFk;
 
-    public Game(int isWinner, User userFk) {
+    public Game(int isWinner, int difficulty, User userFk) {
         this.isWinner = isWinner;
+        this.difficulty = difficulty;
         this.userFk = userFk;
     }
 }
