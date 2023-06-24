@@ -28,7 +28,6 @@ public class GameService {
     private final DeepLearningClient deepLearningClient;
     private final GameRepository gameRepository;
     private final JwtProvider jwtProvider;
-    private static Long REVIEW_IDX = 1l;
 
     /**
      * 랜덤으로 선공을 정해주는 메서드 1: 유저 2: 에이전트
@@ -82,13 +81,7 @@ public class GameService {
         // 게임 로드
         Game game = gameRepository.findById(gameDto.getGameIdx()).get();
 
-        // 컨텐츠 생성
-        Content content = new Content(gameDto.toReviewContent());
-        ReviewId reviewId = new ReviewId();
-        reviewId.setId(REVIEW_IDX++);
-
         Review review = new Review(game, gameDto.getTurn(), gameDto.toJsonString());
-        review.setReviewId(reviewId);
 
         reviewRepository.save(review);
     }
