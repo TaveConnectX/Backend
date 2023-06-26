@@ -1,13 +1,10 @@
 package com.tave.connectX.entity;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.tave.connectX.entity.review.Content;
 import com.tave.connectX.entity.review.ReviewId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 @Entity
 @Data
@@ -15,10 +12,11 @@ import org.hibernate.annotations.Type;
 @AllArgsConstructor
 public class Review {
 
-    @EmbeddedId
-    private ReviewId reviewId;
+    @Id
+    @Column(name = "review_idx")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long reviewId;
 
-    @MapsId("gameId")
     @ManyToOne
     @JoinColumn(name = "game_idx")
     private Game gameFk;
