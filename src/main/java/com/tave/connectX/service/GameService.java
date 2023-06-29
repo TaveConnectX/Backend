@@ -2,11 +2,10 @@ package com.tave.connectX.service;
 
 import com.tave.connectX.api.DeepLearningClient;
 import com.tave.connectX.dto.GameDto;
+import com.tave.connectX.dto.ReviewResponseDto;
 import com.tave.connectX.entity.Game;
 import com.tave.connectX.entity.Review;
 import com.tave.connectX.entity.User;
-import com.tave.connectX.entity.review.Content;
-import com.tave.connectX.entity.review.ReviewId;
 import com.tave.connectX.provider.JwtProvider;
 import com.tave.connectX.repository.GameRepository;
 import com.tave.connectX.repository.ReviewRepository;
@@ -16,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -105,5 +106,24 @@ public class GameService {
 
         return modelResult;
     }
+
+    public List<ReviewResponseDto> findReview(HttpServletRequest request) {
+
+        User user = loadUser(request);
+
+        Game game;
+        try {
+            game = gameRepository.findByUserFk(user).get();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+            List<Review> reviewList = reviewRepository.findAllByGameFk(game);
+
+        ArrayList<ReviewResponseDto> reviewResponseDto = new ArrayList<>();
+        reviewList.forEach(review -> reviewResponseDto.add(new ReviewResponseDto(review.getTurn(), review.jsonToList())));
+
+        return reviewResponseDto;
+    }
+
 
 }
