@@ -1,5 +1,8 @@
 package com.tave.connectX.entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tave.connectX.entity.review.ReviewId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Review {
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Id
     @Column(name = "review_idx")
@@ -36,4 +41,18 @@ public class Review {
         this.turn = turn;
         this.content = content;
     }
+
+    public int[][] jsonToList() {
+
+        int[][] list;
+
+        try {
+                list = objectMapper.readValue(this.content, int[][].class);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+        return list;
+    }
+
 }
