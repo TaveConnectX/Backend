@@ -2,14 +2,18 @@ package com.tave.connectX.service;
 
 import com.tave.connectX.api.DeepLearningClient;
 import com.tave.connectX.dto.GameDto;
+import com.tave.connectX.dto.GameEndDto;
+import com.tave.connectX.dto.GameResult;
 import com.tave.connectX.dto.ReviewResponseDto;
 import com.tave.connectX.entity.Game;
 import com.tave.connectX.entity.Review;
 import com.tave.connectX.entity.User;
+import com.tave.connectX.entity.game.Difficulty;
 import com.tave.connectX.provider.JwtProvider;
 import com.tave.connectX.repository.GameRepository;
 import com.tave.connectX.repository.ReviewRepository;
 import com.tave.connectX.repository.UserRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,12 +56,13 @@ public class GameService {
      * 게임 시작 요청시 최초로 호출됩니다.
      * 게임 엔티티를 생성하고 선공을 정하여 응답합니다
      */
-    public GameDto startGame(HttpServletRequest request) {
+    public GameDto startGame(HttpServletRequest request, Difficulty difficulty) {
 
         // 유저 정보를 로드하고 게임 엔티티를 생성합니다.
         Game game = new Game();
         game.setUserFk(loadUser(request));
-        gameRepository.save(game).getGameIdx();
+        game.setDifficulty(difficulty);
+        gameRepository.save(game);
 
         int[][] list = new int[6][7];
         GameDto gameDto = new GameDto();
@@ -107,13 +112,31 @@ public class GameService {
         return modelResult;
     }
 
+    public Long endGame(GameEndDto gameEndDto) {
+
+        Game game = gameRepository.findById(gameEndDto.getGameIdx()).get();
+
+        game.setIsWinner(gameEndDto.getWinner());
+
+        // 유저가 이긴 경우 마지막 결과를 저장
+        if (gameEndDto.getWinner() == 1) {
+            saveReview(gameEndDto);
+        }
+
+        Long userIdx = game.getUserFk().getUserIdx();
+        User user = userRepository.findById(userIdx).get();
+        Long updateLastGameIdx = user.updateLastGameIdx(gameEndDto.getGameIdx());
+
+        return gameEndDto.getGameIdx();
+    }
+
     public List<ReviewResponseDto> findReview(HttpServletRequest request) {
 
         User user = loadUser(request);
 
         Game game;
         try {
-            game = gameRepository.findByUserFk(user).get();
+            game = gameRepository.findById(user.getLastGameIdx()).get();
         } catch (NoSuchElementException e) {
             return null;
         }

@@ -1,16 +1,16 @@
 package com.tave.connectX.controller;
 
 import com.tave.connectX.dto.GameDto;
+import com.tave.connectX.dto.GameEndDto;
 import com.tave.connectX.dto.ReviewResponseDto;
+import com.tave.connectX.entity.User;
+import com.tave.connectX.entity.game.Difficulty;
 import com.tave.connectX.service.GameService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,19 +21,28 @@ public class GameController {
     private final GameService gameService;
 
     // 게임 시작
-    @GetMapping("/game")
-    public ResponseEntity createGame(HttpServletRequest request) {
-        GameDto gameDto = gameService.startGame(request);
+    @GetMapping("/games")
+    public ResponseEntity createGame(HttpServletRequest request, @RequestParam Difficulty difficulty) {
+        GameDto gameDto = gameService.startGame(request, difficulty);
         return ResponseEntity.ok(gameDto);
     }
 
     // 게임 진행
-    @PostMapping("/game")
+    @PostMapping("/games")
     public ResponseEntity playGame(@RequestBody GameDto gameDto) {
         GameDto modelResponse = gameService.processGame(gameDto);
 
         return ResponseEntity.ok(modelResponse);
     }
+
+    // 게임 종료
+    @PostMapping("/games/results")
+    public ResponseEntity endGame(@RequestBody GameEndDto gameEndDto) {
+        Long aLong = gameService.endGame(gameEndDto);
+
+        return ResponseEntity.ok(aLong);
+    }
+
 
     @GetMapping("/games/review")
     public ResponseEntity getRecentReview(HttpServletRequest request) {

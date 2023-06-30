@@ -16,14 +16,11 @@ public class GameDto {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private int[][] list;   // 게임 맵
-    private int now;        // 방금 둔 위치
     private int turn;       // 턴 수
-
     private Long gameIdx;
 
-    public GameDto(int[][] list, int now, int turn, Long gameIdx) {
+    public GameDto(int[][] list, int turn, Long gameIdx) {
         this.list = list;
-        this.now = now;
         this.turn = turn;
         this.gameIdx = gameIdx;
     }
