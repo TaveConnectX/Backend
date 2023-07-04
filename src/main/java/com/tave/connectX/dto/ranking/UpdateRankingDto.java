@@ -13,6 +13,7 @@ public class UpdateRankingDto {
     private Long userIdx;
     private int victory;
     private int defeat;
+    private int draw;
     private int point;
     private Difficulty difficulty;
 }

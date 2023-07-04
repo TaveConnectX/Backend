@@ -20,12 +20,16 @@ public class Percentage {
     private int defeat;
 
     @Column
+    private int draw;
+
+    @Column
     private int points;
 
-    public Percentage(User userFk, int victory, int defeat) {
+    public Percentage(User userFk, int victory, int defeat, int draw) {
         this.userFk = userFk;
         this.victory = victory;
         this.defeat = defeat;
+        this.draw = draw;
     }
 
     public int updatePoints(int points) {
