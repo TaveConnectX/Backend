@@ -1,5 +1,6 @@
 package com.tave.connectX.controller;
 
+import com.tave.connectX.dto.ranking.ReturnRankingDto;
 import com.tave.connectX.dto.ranking.UpdateRankingDto;
 import com.tave.connectX.service.RankingService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class RankingController {
 
     @PostMapping()
     public ResponseEntity updateRanking(@RequestBody UpdateRankingDto updateRankingDto) {
-        rankingService.updateRanking(updateRankingDto);
-        return ResponseEntity.ok("ok");
+        ReturnRankingDto resultDto = rankingService.updateRanking(updateRankingDto);
+        return ResponseEntity.ok(resultDto);
     }
 }
