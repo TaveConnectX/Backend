@@ -1,6 +1,7 @@
 package com.tave.connectX.dao;
 
 import com.tave.connectX.dto.ranking.GetRankingDto;
+import com.tave.connectX.dto.ranking.ReturnRankingDto;
 import com.tave.connectX.dto.ranking.UpdateRankingDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,12 +32,20 @@ public class RankingDao {
         });
     }
 
-    public void updateRanking(UpdateRankingDto updateRankingDto) {
-        String sql = "update Percentage" +
+    public ReturnRankingDto updateRanking(UpdateRankingDto updateRankingDto) {
+        String updateSql = "update Percentage" +
                 " set victory = victory + ?, defeat = defeat + ?, points = points + ?" +
                 " where user_idx = ?";
         Object[] params = {updateRankingDto.getVictory(), updateRankingDto.getDefeat(), updateRankingDto.getPoint(), updateRankingDto.getUserIdx()};
+        this.jdbcTemplate.update(updateSql, params);
 
-        this.jdbcTemplate.update(sql, params);
+        String selectSql = "select user_idx, victory, defeat, points from Percentage where user_idx = ?";
+        return this.jdbcTemplate.queryForObject(selectSql, (rs, rowNum) -> {
+            ReturnRankingDto resultDto = new ReturnRankingDto();
+            resultDto.setVictory(rs.getInt("victory"));
+            resultDto.setDefeat(rs.getInt("defeat"));
+            resultDto.setPoint(rs.getInt("points"));
+            return resultDto;
+        }, updateRankingDto.getUserIdx());
     }
 }

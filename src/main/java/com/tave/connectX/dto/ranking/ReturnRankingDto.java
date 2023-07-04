@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UpdateRankingDto {
-    private Long userIdx;
+public class ReturnRankingDto {
     private int victory;
     private int defeat;
     private int point;
