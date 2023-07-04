@@ -1,4 +1,4 @@
-package com.tave.connectX.entity.ranking;
+package com.tave.connectX.dto.ranking;
 
 import lombok.Data;
 

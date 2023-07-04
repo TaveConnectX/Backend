@@ -1,6 +1,6 @@
 package com.tave.connectX.controller;
 
-import com.tave.connectX.entity.ranking.UpdateRankingDto;
+import com.tave.connectX.dto.ranking.UpdateRankingDto;
 import com.tave.connectX.service.RankingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

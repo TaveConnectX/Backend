@@ -1,7 +1,7 @@
 package com.tave.connectX.dao;
 
-import com.tave.connectX.entity.ranking.GetRankingDto;
-import com.tave.connectX.entity.ranking.UpdateRankingDto;
+import com.tave.connectX.dto.ranking.GetRankingDto;
+import com.tave.connectX.dto.ranking.UpdateRankingDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

@@ -1,8 +1,8 @@
 package com.tave.connectX.service;
 
 import com.tave.connectX.dao.RankingDao;
-import com.tave.connectX.entity.ranking.GetRankingDto;
-import com.tave.connectX.entity.ranking.UpdateRankingDto;
+import com.tave.connectX.dto.ranking.GetRankingDto;
+import com.tave.connectX.dto.ranking.UpdateRankingDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
