@@ -134,7 +134,7 @@ public class GameService {
         Long updateLastGameIdx = user.updateLastGameIdx(gameEndDto.getGameIdx());
 
         int point = 0;
-        int defeat = 0, victory = 0;
+        int defeat = 0, victory = 0, draw = 0;
 
         // HARD 난이도인 경우에는 승점 변동
         if (game.getDifficulty().name().equals("HARD")) {
@@ -144,6 +144,7 @@ public class GameService {
                 point = 3;
                 victory = 1;
                 defeat = 0;
+                draw = 0;
             }
 
             // 패배
@@ -151,6 +152,7 @@ public class GameService {
                 point = -3;
                 victory = 0;
                 defeat = 1;
+                draw = 0;
             }
 
             // 무승부
@@ -158,11 +160,12 @@ public class GameService {
                 point = 1;
                 victory = 0;
                 defeat = 0;
+                draw = 1;
             }
 
         }
 
-        ReturnRankingDto returnRankingDto = rankingService.updateRanking(new UpdateRankingDto(userIdx, victory, defeat, point, game.getDifficulty()));
+        ReturnRankingDto returnRankingDto = rankingService.updateRanking(new UpdateRankingDto(userIdx, victory, defeat, draw, point, game.getDifficulty()));
         return returnRankingDto;
     }
 
