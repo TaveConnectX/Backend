@@ -1,5 +1,6 @@
 package com.tave.connectX.dto.ranking;
 
+import com.tave.connectX.entity.game.Difficulty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,4 +14,5 @@ public class UpdateRankingDto {
     private int victory;
     private int defeat;
     private int point;
+    private Difficulty difficulty;
 }

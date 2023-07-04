@@ -3,15 +3,20 @@ package com.tave.connectX.controller;
 import com.tave.connectX.dto.GameDto;
 import com.tave.connectX.dto.GameEndDto;
 import com.tave.connectX.dto.ReviewResponseDto;
+import com.tave.connectX.dto.ranking.ReturnRankingDto;
+import com.tave.connectX.dto.ranking.UpdateRankingDto;
 import com.tave.connectX.entity.User;
 import com.tave.connectX.entity.game.Difficulty;
 import com.tave.connectX.service.GameService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -37,10 +42,9 @@ public class GameController {
 
     // 게임 종료
     @PostMapping("/games/results")
-    public ResponseEntity endGame(@RequestBody GameEndDto gameEndDto) {
-        Long aLong = gameService.endGame(gameEndDto);
-
-        return ResponseEntity.ok(aLong);
+    public ReturnRankingDto endGame(@RequestBody GameEndDto gameEndDto, RedirectAttributes redirectAttributes, HttpServletResponse response) {
+        ReturnRankingDto returnRankingDto = gameService.endGame(gameEndDto);
+        return returnRankingDto;
     }
 
 

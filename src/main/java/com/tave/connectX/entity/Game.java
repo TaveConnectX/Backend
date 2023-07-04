@@ -30,4 +30,8 @@ public class Game {
         this.difficulty = difficulty;
         this.userFk = userFk;
     }
+
+    public void insertWinner(int isWinner) {
+        this.isWinner = isWinner;
+    }
 }
