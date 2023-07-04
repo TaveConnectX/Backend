@@ -23,10 +23,4 @@ public class RankingController {
         Map<Integer, String> getRankingDto = rankingService.getRanking();
         return ResponseEntity.ok(getRankingDto);
     }
-
-    @RequestMapping("/update")
-    public ResponseEntity updateRanking(@ModelAttribute UpdateRankingDto updateRankingDto) {
-        ReturnRankingDto resultDto = rankingService.updateRanking(updateRankingDto);
-        return ResponseEntity.ok(resultDto);
-    }
 }
