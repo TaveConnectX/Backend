@@ -2,6 +2,7 @@ package com.tave.connectX.dto;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tave.connectX.entity.game.Difficulty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +20,13 @@ public class GameDto {
     private int turn;       // 턴 수
     private Long gameIdx;
 
-    public GameDto(int[][] list, int turn, Long gameIdx) {
+    private Difficulty difficulty;
+
+    public GameDto(int[][] list, int turn, Long gameIdx, Difficulty difficulty) {
         this.list = list;
         this.turn = turn;
         this.gameIdx = gameIdx;
+        this.difficulty = difficulty;
     }
 
     public Map toReviewContent(){

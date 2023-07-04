@@ -28,7 +28,7 @@ public class DeepLearningClient {
         Integer result = queryModel(map);
 
         if (result == -1) {
-            return new GameDto(map, gameDto.getTurn(), gameDto.getGameIdx());
+            return new GameDto(map, gameDto.getTurn(), gameDto.getGameIdx(),gameDto.getDifficulty());
         }
 
         // 모델 결과 반영하기, 모델이 반환한 열의 가장 위에 돌을 둡니다.
@@ -39,7 +39,7 @@ public class DeepLearningClient {
             }
         }
 
-        return new GameDto(map, gameDto.getTurn() + 1, gameDto.getGameIdx());
+        return new GameDto(map, gameDto.getTurn() + 1, gameDto.getGameIdx(),gameDto.getDifficulty());
     }
 
     private Integer queryModel(int[][] map) {

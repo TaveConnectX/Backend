@@ -34,4 +34,13 @@ public class Game {
     public void insertWinner(int isWinner) {
         this.isWinner = isWinner;
     }
+
+    public void insertUserFK(User userFk) {
+        this.userFk = userFk;
+    }
+
+    public void insertDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
 }
