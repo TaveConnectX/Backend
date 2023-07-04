@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class ReturnRankingDto {
     private int victory;
     private int defeat;
+    private int draw;
     private int point;
 }
