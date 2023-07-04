@@ -63,14 +63,15 @@ public class GameService {
 
         // 유저 정보를 로드하고 게임 엔티티를 생성합니다.
         Game game = new Game();
-        game.setUserFk(loadUser(request));
-        game.setDifficulty(difficulty);
+        game.insertUserFK(loadUser(request));
+        game.insertDifficulty(difficulty);
         gameRepository.save(game);
 
         int[][] list = new int[6][7];
         GameDto gameDto = new GameDto();
         gameDto.setGameIdx(game.getGameIdx());
         gameDto.setList(list);
+        gameDto.setDifficulty(difficulty);
 
         // 선공이 에이전트인 경우 결과를 반영하여 넘겨주고 첫번째 리뷰를 저장합니다.
         if(setFirstTurn() == 2){
