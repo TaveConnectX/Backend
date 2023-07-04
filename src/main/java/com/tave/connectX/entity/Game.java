@@ -1,5 +1,6 @@
 package com.tave.connectX.entity;
 
+import com.tave.connectX.entity.game.Difficulty;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,15 +18,20 @@ public class Game {
     private int isWinner;
 
     @Column
-    private int difficulty;
+    @Enumerated(EnumType.STRING)
+    private Difficulty difficulty;
 
     @ManyToOne
     @JoinColumn(name = "user_idx")
     private User userFk;
 
-    public Game(int isWinner, int difficulty, User userFk) {
+    public Game(int isWinner, Difficulty difficulty, User userFk) {
         this.isWinner = isWinner;
         this.difficulty = difficulty;
         this.userFk = userFk;
+    }
+
+    public void insertWinner(int isWinner) {
+        this.isWinner = isWinner;
     }
 }

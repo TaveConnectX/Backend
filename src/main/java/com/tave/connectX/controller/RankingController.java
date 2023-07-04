@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import java.util.Map;
 
@@ -23,8 +24,8 @@ public class RankingController {
         return ResponseEntity.ok(getRankingDto);
     }
 
-    @PostMapping()
-    public ResponseEntity updateRanking(@RequestBody UpdateRankingDto updateRankingDto) {
+    @RequestMapping("/update")
+    public ResponseEntity updateRanking(@ModelAttribute UpdateRankingDto updateRankingDto) {
         ReturnRankingDto resultDto = rankingService.updateRanking(updateRankingDto);
         return ResponseEntity.ok(resultDto);
     }
