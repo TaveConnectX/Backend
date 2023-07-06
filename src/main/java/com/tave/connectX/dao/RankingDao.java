@@ -3,6 +3,7 @@ package com.tave.connectX.dao;
 import com.tave.connectX.dto.ranking.GetRankingDto;
 import com.tave.connectX.dto.ranking.ReturnRankingDto;
 import com.tave.connectX.dto.ranking.UpdateRankingDto;
+import com.tave.connectX.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,16 +21,38 @@ public class RankingDao {
     }
 
 
-    public List<GetRankingDto> getRanking() {
-        String sql = "select name from Percentage as p" +
+    public List<GetRankingDto> getRankings() {
+        String sql = "select row_number() over (order by p.points DESC, p.victory DESC, p.defeat ASC) as ranking, name, U.profile from Percentage as p" +
                 "    join User U on U.user_idx = p.user_idx" +
                 "            order by p.points DESC, p.victory DESC, p.defeat ASC";
 
         return this.jdbcTemplate.query(sql, (rs, rowNum) -> {
             GetRankingDto getRankingDto = new GetRankingDto();
+            getRankingDto.setRanking(rs.getInt("ranking"));
             getRankingDto.setName(rs.getString("name"));
+            getRankingDto.setPicture(rs.getString("profile"));
             return getRankingDto;
         });
+    }
+
+    public GetRankingDto getRanking(User user) {
+        String sql = "SELECT ranking, name, profile " +
+                "FROM (" +
+                "    SELECT U.user_idx, ROW_NUMBER() OVER (ORDER BY p.points DESC, p.victory DESC, p.defeat ASC) AS ranking, name, U.profile" +
+                "    FROM Percentage AS p" +
+                "    JOIN User U ON U.user_idx = p.user_idx" +
+                "    ORDER BY p.points DESC, p.victory DESC, p.defeat ASC" +
+                " ) AS subquery" +
+                " WHERE user_idx = ?";
+
+        return this.jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+            GetRankingDto getRankingDto = new GetRankingDto();
+            getRankingDto.setRanking(rs.getInt("ranking"));
+            getRankingDto.setName(rs.getString("name"));
+            getRankingDto.setPicture(rs.getString("profile"));
+            return getRankingDto;
+        }, user.getUserIdx());
+
     }
 
     public ReturnRankingDto updateRanking(UpdateRankingDto updateRankingDto) {

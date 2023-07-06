@@ -27,7 +27,7 @@ public class LoginController {
             OAuthToken kakaoAccessToken = oAuthService.getKakaoAccessToken(code);
             OAuthUserInfo userInfo = oAuthService.getUserInfo(kakaoAccessToken);
 
-            User user = new User(userInfo.getOAuthId(), userInfo.getNickName());
+            User user = new User(userInfo.getOAuthId(), userInfo.getNickName(), userInfo.getProfileImage());
             oAuthService.login(user, response);
 
             return ResponseEntity.ok(userInfo.getProfileImage());
