@@ -20,12 +20,11 @@ public class LoginController {
 
     private final OAuthService oAuthService;
 
-    @Operation(summary = "JWT 토큰 얻기", description = "인가코드를 이용해 JWT 토큰을 발급받는 메서드 입니다.")
-    @GetMapping("/login/{code}")
-    public ResponseEntity responseEntity(@PathVariable String code, HttpServletResponse response) {
+    @Operation(summary = "로그인 API", description = "accessToken, refreshToken을 받아 로그인하는 API입니다.")
+    @GetMapping("/login")
+    public ResponseEntity responseEntity(OAuthToken oAuthToken, HttpServletResponse response) {
         try {
-            OAuthToken kakaoAccessToken = oAuthService.getKakaoAccessToken(code);
-            OAuthUserInfo userInfo = oAuthService.getUserInfo(kakaoAccessToken);
+            OAuthUserInfo userInfo = oAuthService.getUserInfo(oAuthToken);
 
             User user = new User(userInfo.getOAuthId(), userInfo.getNickName(), userInfo.getProfileImage());
             oAuthService.login(user, response);
