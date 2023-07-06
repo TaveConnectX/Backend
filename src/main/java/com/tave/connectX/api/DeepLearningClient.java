@@ -1,6 +1,6 @@
 package com.tave.connectX.api;
 
-import com.tave.connectX.dto.GameDto;
+import com.tave.connectX.dto.game.GameDto;
 import com.tave.connectX.entity.game.Difficulty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,9 +9,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.sql.Time;
 import java.util.HashMap;
-import java.util.Timer;
 
 
 @Slf4j
