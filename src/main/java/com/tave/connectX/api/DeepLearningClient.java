@@ -1,8 +1,7 @@
 package com.tave.connectX.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tave.connectX.dto.GameDto;
+import com.tave.connectX.entity.game.Difficulty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +9,9 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.Time;
 import java.util.HashMap;
+import java.util.Timer;
 
 
 @Slf4j
@@ -25,7 +26,7 @@ public class DeepLearningClient {
     public GameDto processResult(GameDto gameDto) {
 
         int[][] map = gameDto.getList();
-        Integer result = queryModel(map);
+        Integer result = queryModel(map, gameDto.getDifficulty());
 
         if (result == -1) {
             return new GameDto(map, gameDto.getTurn(), gameDto.getGameIdx(),gameDto.getDifficulty());
@@ -42,7 +43,7 @@ public class DeepLearningClient {
         return new GameDto(map, gameDto.getTurn() + 1, gameDto.getGameIdx(),gameDto.getDifficulty());
     }
 
-    private Integer queryModel(int[][] map) {
+    private Integer queryModel(int[][] map, Difficulty difficulty) {
 
         try {
 
@@ -51,12 +52,15 @@ public class DeepLearningClient {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            HashMap<String, Object> stringHashMap = new HashMap<>();
-            stringHashMap.put("list", map);
-
-            HttpEntity<HashMap<String, Object>> body = new HttpEntity<>(stringHashMap, headers);
-
+            HashMap<String, Object> modelParameter = new HashMap<>();
+            modelParameter.put("list", map);
+            modelParameter.put("difficulty", difficulty.name());
+            HttpEntity<HashMap<String, Object>> body = new HttpEntity<>(modelParameter, headers);
+            long start = System.currentTimeMillis();
             Integer result = restTemplate.exchange(requestUri, HttpMethod.POST, body, Integer.class).getBody();
+            long end = System.currentTimeMillis();
+
+            log.info("Read time : {}ms", end - start);
 
             return result;
         } catch (RuntimeException e) {

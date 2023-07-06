@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -22,7 +23,7 @@ public class RestTemplateConfig {
                         PoolingHttpClientConnectionManagerBuilder.create()
                                 .setMaxConnTotal(500)
                                 .setMaxConnPerRoute(500)
-                                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(Timeout.of(2, TimeUnit.SECONDS)).build())
+                                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(Timeout.of(10, TimeUnit.SECONDS)).build()) // AI 연산량 증가에 따라 ReadTimeout 증가
                                 .build()
                 )
                 .build();
