@@ -27,14 +27,18 @@ public class User {
     private String name;
 
     @Column
+    private String profile;
+
+    @Column
     private String role;
 
     @Column(name = "last_game_idx")
     private Long lastGameIdx;
 
-    public User(String oauthId, String name) {
+    public User(String oauthId, String name, String profile) {
         this.oauthId = oauthId;
         this.name = name;
+        this.profile = profile;
     }
 
     public Long updateLastGameIdx(Long lastGameIdx) {

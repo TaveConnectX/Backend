@@ -99,7 +99,7 @@ public class OAuthService {
         try {
             com.tave.connectX.entity.User user = oAuthRepository.findUserByOauthId(userDto.getOauthId());
             if (user == null) {
-                user = oAuthRepository.save(new com.tave.connectX.entity.User(userDto.getOauthId(), userDto.getName()));
+                user = oAuthRepository.save(new com.tave.connectX.entity.User(userDto.getOauthId(), userDto.getName(), userDto.getProfile()));
             }
             String token = jwtProvider.buildToken(user);
             response.addHeader("Authorization", "BEARER" + " " + token);

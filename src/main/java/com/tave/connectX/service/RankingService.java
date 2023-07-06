@@ -4,33 +4,41 @@ import com.tave.connectX.dao.RankingDao;
 import com.tave.connectX.dto.ranking.GetRankingDto;
 import com.tave.connectX.dto.ranking.ReturnRankingDto;
 import com.tave.connectX.dto.ranking.UpdateRankingDto;
+import com.tave.connectX.entity.User;
+import com.tave.connectX.provider.JwtProvider;
+import com.tave.connectX.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class RankingService {
+    private final JwtProvider jwtProvider;
+    private final UserRepository userRepository;
     private final RankingDao rankingDao;
 
-    public Map<Integer, String> getRanking() {
-        List<GetRankingDto> getRankingDto = rankingDao.getRanking();
-        Map<Integer, String> rankings = new HashMap<>();
+    public List<GetRankingDto> getRankings() {
+        return rankingDao.getRankings();
+    }
 
-        int index = 1;
-        for (GetRankingDto dto : getRankingDto) {
-            rankings.put(index, dto.getName());
-            index++;
-        }
-
-        return rankings;
+    public GetRankingDto getRanking(HttpServletRequest request) {
+        User user = loadUser(request);
+        return rankingDao.getRanking(user);
     }
 
 
     public ReturnRankingDto updateRanking(UpdateRankingDto updateRankingDto) {
         return rankingDao.updateRanking(updateRankingDto);
+    }
+
+    private User loadUser(HttpServletRequest request) {
+        // 현재 유저 조회
+        String token = jwtProvider.resolveToken(request);
+        String account = jwtProvider.getAccount(token.split(" ")[1].trim());
+        User user = userRepository.findByOauthId(account).get();
+        return user;
     }
 }
