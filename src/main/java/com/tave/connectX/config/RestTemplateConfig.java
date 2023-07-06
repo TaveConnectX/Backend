@@ -22,7 +22,7 @@ public class RestTemplateConfig {
                         PoolingHttpClientConnectionManagerBuilder.create()
                                 .setMaxConnTotal(500)
                                 .setMaxConnPerRoute(500)
-                                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(Timeout.of(2, TimeUnit.SECONDS)).build())
+                                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(Timeout.of(20, TimeUnit.SECONDS)).build()) // AI 연산량 증가에 따라 ReadTimeout 증가
                                 .build()
                 )
                 .build();

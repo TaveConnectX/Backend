@@ -1,4 +1,4 @@
-package com.tave.connectX.dto;
+package com.tave.connectX.dto.game;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,15 +41,26 @@ public class GameDto {
         return map;
     }
 
-    public String toJsonString() {
+    public static String toJsonString(int[][] list) {
         String jsonString = "";
 
         try {
-            jsonString = objectMapper.writeValueAsString(this.list);
+            jsonString = objectMapper.writeValueAsString(list);
         } catch (JsonProcessingException e) {
             log.error(e.getMessage());
         }
         return jsonString;
     }
-
+    public int[][] swapArray() {
+        int arr[][] = this.list;
+        int swap[][] = new int[arr.length][arr[0].length];
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[0].length; j++) {
+                if (arr[i][j] != 0) {
+                    swap[i][j] = (arr[i][j] == 1) ? 2 : 1;
+                }
+            }
+        }
+        return swap;
     }
+}

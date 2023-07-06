@@ -11,4 +11,5 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findAllByGameFk(Game game);
 
+    List<Review> findAllByGameFkOrderByTurn(Game game);
 }

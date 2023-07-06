@@ -1,17 +1,15 @@
 package com.tave.connectX.controller;
 
-import com.tave.connectX.dto.GameDto;
-import com.tave.connectX.dto.GameEndDto;
-import com.tave.connectX.dto.ReviewResponseDto;
+import com.tave.connectX.dto.game.ContinueGameResponseDto;
+import com.tave.connectX.dto.game.GameDto;
+import com.tave.connectX.dto.game.GameEndDto;
+import com.tave.connectX.dto.game.ReviewResponseDto;
 import com.tave.connectX.dto.ranking.ReturnRankingDto;
-import com.tave.connectX.dto.ranking.UpdateRankingDto;
-import com.tave.connectX.entity.User;
 import com.tave.connectX.entity.game.Difficulty;
 import com.tave.connectX.service.GameService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -69,5 +66,16 @@ public class GameController {
 
         return ResponseEntity.ok(userReview);
     }
+
+    @Operation(summary = "최근 게임 정보 불러오기")
+    @GetMapping("/games/{gameIdx}")
+    public ResponseEntity getRecentGame(@Parameter(name = "gameIdx") @PathVariable(name = "gameIdx") Long gameIdx) {
+        ContinueGameResponseDto continueGameResponseDto = gameService.loadRecentGame(gameIdx);
+        if (continueGameResponseDto.getTotalTurnCount() == 0) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(continueGameResponseDto);
+    }
+
 
 }

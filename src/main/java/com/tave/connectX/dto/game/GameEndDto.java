@@ -1,4 +1,4 @@
-package com.tave.connectX.dto;
+package com.tave.connectX.dto.game;
 
 
 import lombok.Data;

@@ -1,9 +1,10 @@
 package com.tave.connectX.service;
 
 import com.tave.connectX.api.DeepLearningClient;
-import com.tave.connectX.dto.GameDto;
-import com.tave.connectX.dto.GameEndDto;
-import com.tave.connectX.dto.ReviewResponseDto;
+import com.tave.connectX.dto.game.ContinueGameResponseDto;
+import com.tave.connectX.dto.game.GameDto;
+import com.tave.connectX.dto.game.GameEndDto;
+import com.tave.connectX.dto.game.ReviewResponseDto;
 import com.tave.connectX.dto.ranking.ReturnRankingDto;
 import com.tave.connectX.dto.ranking.UpdateRankingDto;
 import com.tave.connectX.entity.Game;
@@ -91,7 +92,7 @@ public class GameService {
         // 게임 로드
         Game game = gameRepository.findById(gameDto.getGameIdx()).get();
 
-        Review review = new Review(game, gameDto.getTurn(), gameDto.toJsonString());
+        Review review = new Review(game, gameDto.getTurn(), gameDto.toJsonString(gameDto.getList()));
 
         reviewRepository.save(review);
     }
@@ -187,6 +188,46 @@ public class GameService {
 
         return reviewResponseDto;
     }
+
+    public ContinueGameResponseDto loadRecentGame(Long gameIdx) {
+
+        Game game;
+        try {
+            game = gameRepository.findById(gameIdx).orElseThrow();
+        } catch (NoSuchElementException e) {
+            return new ContinueGameResponseDto(0,-1, gameIdx, null, null);
+        }
+
+        List<Review> reviewList = reviewRepository.findAllByGameFkOrderByTurn(game);
+
+        int[][] firstGameState = reviewList.get(0).jsonToList();
+        int totalTurn = reviewList.size();
+        int firstTurn = 0;
+        int nextTurn = 0;
+
+        for (int i = 0; i < 7; i++) {
+            if (firstGameState[5][i] != 0) {
+                firstTurn = firstGameState[5][i];
+                break;
+            }
+        }
+        log.info("firstTurn : {} , totalTurn : {}", firstTurn, totalTurn);
+
+        // 유저 선공이면서 다음 턴이 홀수 턴인 경우 유저가 할 턴임
+        if (firstTurn == 1 ) {
+            if(totalTurn%2 == 0) nextTurn = 1;
+            else nextTurn = 2;
+        }
+
+        if (firstTurn == 2) {
+            if(totalTurn%2 == 0) nextTurn = 2;
+            else nextTurn = 1;
+        }
+
+        int[][] list = reviewList.get(reviewList.size() - 1).jsonToList();
+
+        return new ContinueGameResponseDto(totalTurn,nextTurn, game.getGameIdx(), game.getDifficulty(),list);
+    };
 
 
 }
