@@ -11,4 +11,8 @@ import java.util.Optional;
 
 public interface GameRepository extends JpaRepository<Game, Long> {
     Optional<Game> findByUserFk(User user);
+
+    @Query("select distinct g from Game g left join fetch g.reviews where g.id = :id")
+    Optional<Game> findByIdFetch(@Param("id") Long id);
+
 }

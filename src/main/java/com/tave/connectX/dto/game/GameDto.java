@@ -63,4 +63,9 @@ public class GameDto {
         }
         return swap;
     }
+
+    public void changeTurn() {
+        this.turn++;
+    }
+
 }

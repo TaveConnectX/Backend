@@ -29,7 +29,10 @@ public class DeepLearningClient {
     public GameDto processResult(GameDto gameDto) {
 
         int[][] map = gameDto.getList();
-
+        
+        // 모델 턴으로 변경
+        gameDto.changeTurn();
+        
         Integer result = queryModel(map, gameDto.getDifficulty());
 
         if (result == -1) {
@@ -39,13 +42,14 @@ public class DeepLearningClient {
         updateMap(map, result);
 
         int[][] swap = gameDto.swapArray();
-        Integer recommendedResult = queryModel(swap, gameDto.getDifficulty());
 
-        updateMap(swap, result);
-        Recommendation recommendation = new Recommendation(gameRepository.findById(gameDto.getGameIdx()).get(), GameDto.toJsonString(swap), gameDto.getTurn() + 1);
+        // 강한 모델로부터 추천 받음
+        Integer recommendedResult = queryModel(swap, Difficulty.hard);
+        log.info("recommendedResult : {}", recommendedResult);
+        Recommendation recommendation = new Recommendation(gameRepository.findById(gameDto.getGameIdx()).get(), recommendedResult, gameDto.getTurn() + 1);
         recommendationRepository.save(recommendation);
 
-        return new GameDto(map, gameDto.getTurn() + 1, gameDto.getGameIdx(),gameDto.getDifficulty());
+        return new GameDto(map, gameDto.getTurn(), gameDto.getGameIdx(),gameDto.getDifficulty());
     }
 
     private static void updateMap(int[][] map, Integer result) {

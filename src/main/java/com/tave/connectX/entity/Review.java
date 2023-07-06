@@ -22,7 +22,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_idx")
     private Game gameFk;
 
@@ -31,10 +31,6 @@ public class Review {
 
     @Column(name = "content")
     private String content;
-
-//    @JsonSubTypes.Type(Content.class)
-//    @Column(columnDefinition = "json")
-//    private Object content;
 
     public Review(Game gameFk, int turn, String content) {
         this.gameFk = gameFk;
