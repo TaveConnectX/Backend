@@ -92,7 +92,7 @@ public class GameService {
         // 게임 로드
         Game game = gameRepository.findById(gameDto.getGameIdx()).get();
 
-        Review review = new Review(game, gameDto.getTurn(), gameDto.toJsonString());
+        Review review = new Review(game, gameDto.getTurn(), gameDto.toJsonString(gameDto.getList()));
 
         reviewRepository.save(review);
     }
