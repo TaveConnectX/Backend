@@ -53,7 +53,7 @@ public class GameController {
     }
 
 
-    @Operation(summary = "리뷰 API", description = "최근 게임 정보를 반환합니다. { 턴수, 상태 }")
+    @Operation(summary = "리뷰 API", description = "최근 게임 정보를 반환합니다. { 턴수, 상태, 추천하는 열 }")
     @ApiResponse(responseCode = "404", description = "NOT FOUND")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping("/games/review")
@@ -76,6 +76,5 @@ public class GameController {
         }
         return ResponseEntity.ok(continueGameResponseDto);
     }
-
 
 }

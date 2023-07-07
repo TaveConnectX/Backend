@@ -3,10 +3,13 @@ package com.tave.connectX.entity;
 import com.tave.connectX.entity.game.Difficulty;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
-@Data
+@Getter
 @NoArgsConstructor
 public class Game {
     @Id
@@ -24,6 +27,13 @@ public class Game {
     @ManyToOne
     @JoinColumn(name = "user_idx")
     private User userFk;
+
+    @OneToMany(mappedBy = "game")
+    private List<Recommendation> recommendations;
+
+    @OneToMany(mappedBy = "gameFk")
+    private List<Review> reviews;
+
 
     public Game(int isWinner, Difficulty difficulty, User userFk) {
         this.isWinner = isWinner;
