@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.security.SecuritySchemes;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
@@ -15,6 +16,9 @@ import org.springframework.context.annotation.Configuration;
                 version = "v1"),
         security = {
                 @SecurityRequirement(name = "Authorization")
+        },
+        servers = {
+                @Server(url = "/")
         }
 )
 @SecuritySchemes({
