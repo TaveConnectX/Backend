@@ -16,4 +16,12 @@ public class UpdateRankingDto {
     private int draw;
     private int point;
     private Difficulty difficulty;
+
+    public UpdateRankingDto(Long userIdx, int victory, int defeat, int draw, int point) {
+        this.userIdx = userIdx;
+        this.victory = victory;
+        this.defeat = defeat;
+        this.draw = draw;
+        this.point = point;
+    }
 }
