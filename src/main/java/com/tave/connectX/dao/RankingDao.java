@@ -31,7 +31,7 @@ public class RankingDao {
             getRankingDto.setRanking(rs.getInt("ranking"));
             getRankingDto.setVictory(rs.getInt("victory"));
             getRankingDto.setDefeat(rs.getInt("defeat"));
-            getRankingDto.setRanking(rs.getInt("draw"));
+            getRankingDto.setDraw(rs.getInt("draw"));
             getRankingDto.setName(rs.getString("name"));
             getRankingDto.setPicture(rs.getString("profile"));
             return getRankingDto;
@@ -53,7 +53,7 @@ public class RankingDao {
             getRankingDto.setRanking(rs.getInt("ranking"));
             getRankingDto.setVictory(rs.getInt("victory"));
             getRankingDto.setDefeat(rs.getInt("defeat"));
-            getRankingDto.setRanking(rs.getInt("draw"));
+            getRankingDto.setDraw(rs.getInt("draw"));
             getRankingDto.setName(rs.getString("name"));
             getRankingDto.setPicture(rs.getString("profile"));
             return getRankingDto;
