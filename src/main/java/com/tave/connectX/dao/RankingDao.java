@@ -22,15 +22,15 @@ public class RankingDao {
 
 
     public List<GetRankingDto> getRankings() {
-        String sql = "select U.user_idx, row_number() over (order by p.points DESC, p.victory DESC, p.defeat ASC) as ranking, victory, defeat, draw, name, U.profile from Percentage as p" +
+        String sql = "select row_number() over (order by p.points DESC, p.victory DESC, p.defeat ASC) as ranking, victory, defeat, draw, name, U.profile from Percentage as p" +
                 "    join User U on U.user_idx = p.user_idx" +
                 "            order by p.points DESC, p.victory DESC, p.defeat ASC";
 
         return this.jdbcTemplate.query(sql, (rs, rowNum) -> {
             GetRankingDto getRankingDto = new GetRankingDto();
             getRankingDto.setRanking(rs.getInt("ranking"));
-            getRankingDto.setRanking(rs.getInt("victory"));
-            getRankingDto.setRanking(rs.getInt("defeat"));
+            getRankingDto.setVictory(rs.getInt("victory"));
+            getRankingDto.setDefeat(rs.getInt("defeat"));
             getRankingDto.setRanking(rs.getInt("draw"));
             getRankingDto.setName(rs.getString("name"));
             getRankingDto.setPicture(rs.getString("profile"));
@@ -51,8 +51,8 @@ public class RankingDao {
         return this.jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
             GetRankingDto getRankingDto = new GetRankingDto();
             getRankingDto.setRanking(rs.getInt("ranking"));
-            getRankingDto.setRanking(rs.getInt("victory"));
-            getRankingDto.setRanking(rs.getInt("defeat"));
+            getRankingDto.setVictory(rs.getInt("victory"));
+            getRankingDto.setDefeat(rs.getInt("defeat"));
             getRankingDto.setRanking(rs.getInt("draw"));
             getRankingDto.setName(rs.getString("name"));
             getRankingDto.setPicture(rs.getString("profile"));
