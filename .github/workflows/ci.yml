@@ -16,6 +16,18 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      
+      # Git pull
+      - name: Git pull
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ubuntu
+          key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+          run: |
+            cd ../../var/www/Backend/
+            git pull origin main
+          
 
       # Gradle build
       - name: Build with Gradle
