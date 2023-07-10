@@ -32,11 +32,11 @@ public class DeepLearningClient {
         
         // 모델 턴으로 변경
         gameDto.changeTurn();
-        
+
         Integer result = queryModel(map, gameDto.getDifficulty());
 
         if (result == -1) {
-            return new GameDto(map, gameDto.getTurn(), gameDto.getGameIdx(),gameDto.getDifficulty());
+            return new GameDto(map, gameDto.getTurn(), gameDto.getGameIdx(),gameDto.getDifficulty(), result);
         }
 
         updateMap(map, result);
@@ -49,7 +49,7 @@ public class DeepLearningClient {
         Recommendation recommendation = new Recommendation(gameRepository.findById(gameDto.getGameIdx()).get(), recommendedResult, gameDto.getTurn() + 1);
         recommendationRepository.save(recommendation);
 
-        return new GameDto(map, gameDto.getTurn(), gameDto.getGameIdx(),gameDto.getDifficulty());
+        return new GameDto(map, gameDto.getTurn(), gameDto.getGameIdx(),gameDto.getDifficulty(), result);
     }
 
     private static void updateMap(int[][] map, Integer result) {

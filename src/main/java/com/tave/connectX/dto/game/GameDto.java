@@ -19,14 +19,15 @@ public class GameDto {
     private int[][] list;   // 게임 맵
     private int turn;       // 턴 수
     private Long gameIdx;
-
+    private int now;
     private Difficulty difficulty;
 
-    public GameDto(int[][] list, int turn, Long gameIdx, Difficulty difficulty) {
+    public GameDto(int[][] list, int turn, Long gameIdx, Difficulty difficulty, int now) {
         this.list = list;
         this.turn = turn;
         this.gameIdx = gameIdx;
         this.difficulty = difficulty;
+        this.now = now;
     }
 
     public Map toReviewContent(){
