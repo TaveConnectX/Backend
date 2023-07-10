@@ -30,6 +30,7 @@ jobs:
 
       # Spring 어플리케이션 Docker Image 빌드
       - name: Build Docker Image For Spring
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.REMOTE_IP }}
           username: ubuntu
