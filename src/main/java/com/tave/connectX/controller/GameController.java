@@ -3,7 +3,7 @@ package com.tave.connectX.controller;
 import com.tave.connectX.dto.game.ContinueGameResponseDto;
 import com.tave.connectX.dto.game.GameDto;
 import com.tave.connectX.dto.game.GameEndDto;
-import com.tave.connectX.dto.game.ReviewResponseDto;
+import com.tave.connectX.dto.game.ReviewDto;
 import com.tave.connectX.dto.ranking.ReturnRankingDto;
 import com.tave.connectX.entity.game.Difficulty;
 import com.tave.connectX.service.GameService;
@@ -58,7 +58,7 @@ public class GameController {
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping("/games/review")
     public ResponseEntity getRecentReview(HttpServletRequest request) {
-        List<ReviewResponseDto> userReview = gameService.findReview(request);
+        List<ReviewDto> userReview = gameService.findReview(request);
 
         if (userReview == null) {
             return ResponseEntity.notFound().build();

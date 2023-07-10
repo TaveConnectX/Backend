@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ReviewResponseDto {
-
+public class ReviewDto {
+    private int first;
     private int turn;
     private int[][] list;
     private Integer recommendation;
