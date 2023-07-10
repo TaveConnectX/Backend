@@ -4,7 +4,7 @@ import com.tave.connectX.api.DeepLearningClient;
 import com.tave.connectX.dto.game.ContinueGameResponseDto;
 import com.tave.connectX.dto.game.GameDto;
 import com.tave.connectX.dto.game.GameEndDto;
-import com.tave.connectX.dto.game.ReviewResponseDto;
+import com.tave.connectX.dto.game.ReviewDto;
 import com.tave.connectX.dto.ranking.ReturnRankingDto;
 import com.tave.connectX.dto.ranking.UpdateRankingDto;
 import com.tave.connectX.entity.Game;
@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -180,7 +179,7 @@ public class GameService {
         return returnRankingDto;
     }
 
-    public List<ReviewResponseDto> findReview(HttpServletRequest request) {
+    public List<ReviewDto> findReview(HttpServletRequest request) {
 
         User user = loadUser(request);
 
@@ -193,8 +192,20 @@ public class GameService {
 
         List<Review> reviewList = game.getReviews();
         List<Recommendation> recommendationList = game.getRecommendations();
+
+        Review firstReview = reviewList.get(0);
+        int[][] firstGameState = firstReview.jsonToList();
+        int firstTurn = 0;
+
+        for (int i = 0; i < 7; i++) {
+            if (firstGameState[5][i] != 0) {
+                firstTurn = firstGameState[5][i];
+                break;
+            }
+        }
+
         int idx = 0;
-        ArrayList<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
+        ArrayList<ReviewDto> reviewDtoList = new ArrayList<>();
         Recommendation searchRecommendation = recommendationList.get(idx);
 
         for (Review review : reviewList) {
@@ -209,15 +220,15 @@ public class GameService {
                     searchRecommendation = recommendationList.get(idx);
             }
 
-            ReviewResponseDto reviewResponseDto = new ReviewResponseDto();
-            reviewResponseDto.setList(review.jsonToList());
-            reviewResponseDto.setTurn(review.getTurn());
-            reviewResponseDto.setRecommendation(column);
-
-            reviewResponseDtoList.add(reviewResponseDto);
+            ReviewDto reviewDto = new ReviewDto();
+            reviewDto.setList(review.jsonToList());
+            reviewDto.setTurn(review.getTurn());
+            reviewDto.setRecommendation(column);
+            reviewDto.setFirst(firstTurn);
+            reviewDtoList.add(reviewDto);
         }
 
-        return reviewResponseDtoList;
+        return reviewDtoList;
     }
 
     public ContinueGameResponseDto loadRecentGame(Long gameIdx) {
