@@ -7,22 +7,36 @@ on:
     branches: [ "main" ]
 
 jobs:
-  deploy:
-    name: deploy
-    runs-on: ubuntu-latest
-
+  build:
+    runs-on: ubuntu-latest #ubuntu-20.04
     steps:
-      - name: excuting remote ssh commands
-        uses: appleboy/ssh-action@master # ssh 접속하는 오픈소스
+      # JDK version 설정
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          host: ${{ secrets.REMOTE_IP }} # 인스턴스 IP
-          username: ${{ secrets.REMOTE_USER }} # 우분투 아이디
-          key: ${{ secrets.REMOTE_PRIVATE_KEY }} # ec2 instance pem key
-          port: ${{ secrets.REMOTE_SSH_PORT }} # 접속포트
-          script: | # 실행할 스크립트
-            cd ../../var/www/Backend
-            git pull origin main
-            pm2 kill
-            npm i --force
-            npm run build
-            pm2 start dist/main.js
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Gradle build
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      # Spring 어플리케이션 Docker Image 빌드
+      - name: Build Docker Image For Spring
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/connect_x .
+          docker push ${{ secrets.DOCKER_USERNAME }}/connect_x
+          
+      # 서버에서 Docker 이미지 실행
+      - name: EC2 Docker Run
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ubuntu
+          key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+          script: |
+            docker rm -f $(docker ps -qa)
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/connect_x
+            docker pull ${{ secrets.DOCKER_USERNAME }}/connect_x
+            docker-compose up -d
