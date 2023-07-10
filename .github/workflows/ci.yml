@@ -19,9 +19,14 @@ jobs:
 
       # Gradle build
       - name: Build with Gradle
-        run: |
-          cd ../../var/www/Backend/
-          ./gradlew build
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ubuntu
+          key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+          run: |
+            cd ../../var/www/Backend/
+            ./gradlew build
 
       # Spring 어플리케이션 Docker Image 빌드
       - name: Build Docker Image For Spring
