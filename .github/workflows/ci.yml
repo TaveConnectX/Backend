@@ -32,7 +32,6 @@ jobs:
       - name: Build Docker Image For Spring
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          cd ../../var/www/Backend/
           docker build -t ${{ secrets.DOCKER_USERNAME }}/connect_x .
           docker push ${{ secrets.DOCKER_USERNAME }}/connect_x
           
