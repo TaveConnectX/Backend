@@ -83,6 +83,8 @@ public class GameService {
             saveReview(gameDto);
         }else log.info("유저 선공");
 
+        gameDto.turnListLeft();
+
         return gameDto;
     }
 
@@ -106,6 +108,7 @@ public class GameService {
      */
     public GameDto processGame(GameDto gameDto) {
 
+        gameDto.turnListRight();
         // 유저 턴 저장
         saveReview(gameDto);
 
@@ -115,11 +118,15 @@ public class GameService {
         // 모델 턴 저장
         saveReview(modelResult);
 
+        modelResult.turnListLeft();
+
         return modelResult;
     }
 
     @Transactional
     public ReturnRankingDto endGame(GameEndDto gameEndDto) {
+
+        gameEndDto.turnListRight();
 
         Game game = gameRepository.findById(gameEndDto.getGameIdx()).get();
 

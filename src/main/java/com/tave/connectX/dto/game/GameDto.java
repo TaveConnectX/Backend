@@ -68,4 +68,11 @@ public class GameDto {
         this.turn++;
     }
 
+    public void turnListLeft() {
+        this.list = ArrayTranspose.ArrayTranspose(this.list);
+    }
+
+    public void turnListRight() {
+        this.list = ArrayTranspose.ArrayTransposeReverse(this.list);
+    }
 }
