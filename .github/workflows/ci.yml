@@ -19,7 +19,9 @@ jobs:
 
       # Gradle build
       - name: Build with Gradle
-        run: ./gradlew build
+        run: |
+          cd ../../var/www/Backend/
+          ./gradlew build
 
       # Spring 어플리케이션 Docker Image 빌드
       - name: Build Docker Image For Spring
