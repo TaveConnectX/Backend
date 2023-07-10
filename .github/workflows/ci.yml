@@ -49,7 +49,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.REMOTE_PRIVATE_KEY }}
           script: |
-            docker rm -f $(docker ps -qa)
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/connect_x
-            docker pull ${{ secrets.DOCKER_USERNAME }}/connect_x
-            docker-compose up -d
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/connect_x
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/connect_x
+            sudo docker-compose up -d
