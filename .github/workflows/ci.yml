@@ -26,7 +26,7 @@ jobs:
           key: ${{ secrets.REMOTE_PRIVATE_KEY }}
           run: |
             cd ../../var/www/Backend/
-            git pull origin main
+            sudo git pull origin main
           
 
       # Gradle build
