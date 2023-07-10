@@ -148,7 +148,7 @@ public class GameService {
         int defeat = 0, victory = 0, draw = 0;
 
         // HARD 난이도인 경우에는 승점 변동
-        if (game.getDifficulty().name().equals("HARD")) {
+        if (game.getDifficulty().name().equals("hard")) {
 
             // 승리
             if (winner == 1) {
