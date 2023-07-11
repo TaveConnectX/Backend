@@ -8,7 +8,7 @@ fix : 버그 수정
 
 docs : 문서 변경
 
-style : 서식, 세미콜론 누락 등, 코드 변경 없음
+style : 서식, 세미콜론 누락 등 코드 변경 없음
 
 refactor : Refactoring code
 
