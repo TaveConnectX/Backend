@@ -38,7 +38,7 @@ jobs:
           key: ${{ secrets.REMOTE_PRIVATE_KEY }}
           script: |
             cd ../../var/www/Backend/
-            ./gradlew build
+            sudo ./gradlew build
 
       # Spring 어플리케이션 Docker Image 빌드
       - name: Build Docker Image For Spring
