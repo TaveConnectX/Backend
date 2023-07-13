@@ -106,7 +106,7 @@ public class GameService {
      * 모델의 결과를 반환합니다.
      */
     public GameDto processGame(GameDto gameDto) {
-
+        gameDto.changeTurn();
         gameDto.turnListRight();
         // 유저 턴 저장
         saveReview(gameDto);
