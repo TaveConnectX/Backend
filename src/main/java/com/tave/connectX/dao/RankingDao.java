@@ -78,4 +78,20 @@ public class RankingDao {
             return resultDto;
         }, updateRankingDto.getUserIdx());
     }
+
+    public ReturnRankingDto initRanking(UpdateRankingDto updateRankingDto) {
+        String insertSql = "insert into Percentage values(?,?,?,?,?);" ;
+        Object[] params = {updateRankingDto.getUserIdx(),updateRankingDto.getVictory(), updateRankingDto.getDefeat(), updateRankingDto.getDraw(), updateRankingDto.getPoint()};
+        this.jdbcTemplate.update(insertSql, params);
+
+        String selectSql = "select user_idx, victory, defeat, draw, points from Percentage where user_idx = ?";
+        return this.jdbcTemplate.queryForObject(selectSql, (rs, rowNum) -> {
+            ReturnRankingDto resultDto = new ReturnRankingDto();
+            resultDto.setVictory(rs.getInt("victory"));
+            resultDto.setDefeat(rs.getInt("defeat"));
+            resultDto.setDraw(rs.getInt("draw"));
+            resultDto.setPoint(rs.getInt("points"));
+            return resultDto;
+        }, updateRankingDto.getUserIdx());
+    }
 }
