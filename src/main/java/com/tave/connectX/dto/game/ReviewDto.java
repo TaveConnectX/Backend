@@ -12,4 +12,9 @@ public class ReviewDto {
     private int turn;
     private int[][] list;
     private Integer recommendation;
+
+
+    public void setList(int[][] list) {
+        this.list = ArrayTranspose.ArrayTranspose(list);
+    }
 }
