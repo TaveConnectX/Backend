@@ -16,6 +16,18 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      
+      # Git pull
+      - name: Git pull
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ubuntu
+          key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+          script: |
+            cd ../../var/www/Backend/
+            sudo git pull origin main
+          
 
       # Gradle build
       - name: Build with Gradle
@@ -24,9 +36,9 @@ jobs:
           host: ${{ secrets.REMOTE_IP }}
           username: ubuntu
           key: ${{ secrets.REMOTE_PRIVATE_KEY }}
-          run: |
+          script: |
             cd ../../var/www/Backend/
-            ./gradlew build
+            sudo ./gradlew build
 
       # Spring 어플리케이션 Docker Image 빌드
       - name: Build Docker Image For Spring
@@ -35,7 +47,7 @@ jobs:
           host: ${{ secrets.REMOTE_IP }}
           username: ubuntu
           key: ${{ secrets.REMOTE_PRIVATE_KEY }}
-          run: |
+          script: |
             cd
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker build -t ${{ secrets.DOCKER_USERNAME }}/connect_x .
