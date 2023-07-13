@@ -34,6 +34,10 @@ public class RankingService {
         return rankingDao.updateRanking(updateRankingDto);
     }
 
+    public ReturnRankingDto initRanking(UpdateRankingDto updateRankingDto) {
+        return rankingDao.initRanking(updateRankingDto);
+    }
+
     protected User loadUser(HttpServletRequest request) {
         // 현재 유저 조회
         String token = jwtProvider.resolveToken(request);

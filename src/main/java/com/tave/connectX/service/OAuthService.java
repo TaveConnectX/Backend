@@ -103,7 +103,7 @@ public class OAuthService {
             com.tave.connectX.entity.User user = oAuthRepository.findUserByOauthId(userDto.getOauthId());
             if (user == null) {
                 user = oAuthRepository.save(new com.tave.connectX.entity.User(userDto.getOauthId(), userDto.getName(), userDto.getProfile()));
-                rankingService.updateRanking(new UpdateRankingDto(rankingService.loadUser(request).getUserIdx(), 0, 0, 0, 0));
+                rankingService.initRanking(new UpdateRankingDto(user.getUserIdx(), 0, 0, 0, 0));
             }
             String token = jwtProvider.buildToken(user);
             response.addHeader("Authorization", "BEARER" + " " + token);
