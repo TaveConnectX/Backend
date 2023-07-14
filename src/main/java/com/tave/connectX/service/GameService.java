@@ -1,10 +1,7 @@
 package com.tave.connectX.service;
 
 import com.tave.connectX.api.DeepLearningClient;
-import com.tave.connectX.dto.game.ContinueGameResponseDto;
-import com.tave.connectX.dto.game.GameDto;
-import com.tave.connectX.dto.game.GameEndDto;
-import com.tave.connectX.dto.game.ReviewDto;
+import com.tave.connectX.dto.game.*;
 import com.tave.connectX.dto.ranking.ReturnRankingDto;
 import com.tave.connectX.dto.ranking.UpdateRankingDto;
 import com.tave.connectX.entity.Game;
@@ -268,7 +265,7 @@ public class GameService {
 
         int[][] list = reviewList.get(reviewList.size() - 1).jsonToList();
 
-        return new ContinueGameResponseDto(totalTurn,nextTurn, game.getGameIdx(), game.getDifficulty(),list);
+        return new ContinueGameResponseDto(totalTurn, nextTurn, game.getGameIdx(), game.getDifficulty(), ArrayTranspose.ArrayTranspose(list));
     };
 
 
