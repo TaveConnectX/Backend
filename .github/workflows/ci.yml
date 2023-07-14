@@ -64,4 +64,4 @@ jobs:
             sudo docker rm -f $(docker ps -qa)
             sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/connect_x
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/connect_x:latest
-            docker run -i -t -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/connect_x &
+            docker run -i -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/connect_x &
