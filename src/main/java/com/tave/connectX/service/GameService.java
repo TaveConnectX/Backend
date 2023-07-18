@@ -136,9 +136,8 @@ public class GameService {
         }
         
         // 최근 게임을 저장
-        Long userIdx = game.getUserFk().getUserIdx();
-        User user = userRepository.findById(userIdx).get();
-        Long updateLastGameIdx = user.updateLastGameIdx(gameEndDto.getGameIdx());
+        User user = game.getUserFk();
+        user.updateLastGameIdx(gameEndDto.getGameIdx());
 
         int point = 0;
         int defeat = 0, victory = 0, draw = 0;
@@ -172,7 +171,7 @@ public class GameService {
 
         }
 
-        ReturnRankingDto returnRankingDto = rankingService.updateRanking(new UpdateRankingDto(userIdx, victory, defeat, draw, point, game.getDifficulty()));
+        ReturnRankingDto returnRankingDto = rankingService.updateRanking(new UpdateRankingDto(user.getUserIdx(), victory, defeat, draw, point, game.getDifficulty()));
         return returnRankingDto;
     }
 
